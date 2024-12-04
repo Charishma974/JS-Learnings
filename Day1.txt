@@ -1,0 +1,115 @@
+SuperSimpleDev:-
+
+strings can be created in 3 ways:-
+    1. '...'
+    2. "..."
+    3. `...` 
+        - Interpolation - insert values b/w strings
+        - Multi-line string 
+
+Escape characters - \' \n
+Ex:-
+    'I'm a student' - error
+    Fix:-
+        "I'm a student"
+        'I\'m a student'
+
+Built-in
+	console,Math - they are provided by the language
+	JSON
+	localStorage
+	document object (DOM)
+	window
+
+JSON-
+   javascript object notation
+   similar to js object but has less features
+
+JS Object vs JSON
+1."property" - not mandatory vs mandatory
+2. 'property' - support vs doesn't support
+3. functions - support vs not support
+
+why JSON?
+   js object only make sense in js where as JSON syntax can be understood by every programming language (JSON is universal)
+   we use JSON when we send data b/w computers and when we store data
+
+localstorage only support strings
+localStorage.setItem('message',"Hello");
+			  name,value
+localStorage.setItem('message',JSON.stringify(score));
+
+
+null vs undefined
+function func(parameter='default'){console.log(parameter)}
+func() -> 'default'
+func(undefined) -> 'default'
+func(null) -> null
+
+const obj1={msg: "Hello",price: 799}
+const {msg,price:cost}=obj1;
+console.log(msg) - "Hello"
+console.log(price) - 799
+
+const obj={
+   method(){...} - anonymous function
+}
+
+const add = function(a, b) {
+    return a + b;
+};
+console.log(add(2, 3));  // Output: 5
+function(a, b) { return a + b; } is the anonymous function.
+
+
+Immediately Invoked Function Expressions (IIFE):
+Anonymous functions can be executed immediately upon creation.
+
+(function() {
+    console.log("This runs immediately!");
+})();
+
+
+eval() takes a string and runs it as code
+
+DOM combines JS and HTML together. It gives JS full control of the webpage.
+
+innerText - no spaces at starting
+innerHTML - if space is present then it will give spaces
+
+<input type="text" class='js-input'>
+.js - const value = document.querySelector('.js-input').value;
+
+Number() vs parseInt()
+Number("123");     // Output: 123
+Number("123.45");  // Output: 123.45
+Number("123abc");  // Output: NaN
+Number(true);      // Output: 1
+Number(false);     // Output: 0
+Number(null);      // Output: 0
+Number("");        // Output: 0
+parseInt("123");       // Output: 123
+parseInt("123.45");    // Output: 123  (stops at the decimal point)
+parseInt("123abc");    // Output: 123  (stops at 'a')
+parseInt("abc123");    // Output: NaN  (invalid from the start)
+parseInt("11", 2);     // Output: 3    (binary 11 to decimal)
+
+whenever we get a value from a DOM it is a string
+
+clicks,keydowns -> events
+onclick,onkeydown -> event listeners
+
+if a string only contains a number and we -*/ -> it will be converted into a number
+
+
+document -> represents web page
+window -> represents web browser
+ex:-
+document -> only web page
+window -> web page, console, popups
+
+<link rel="stylesheet" href="website.css">
+
+myArray.splice(0,1) - (index,num of elements to remove)
+myArray.slice(1,3) - (start,end)
+
