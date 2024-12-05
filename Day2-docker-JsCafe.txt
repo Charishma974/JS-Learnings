@@ -1,0 +1,137 @@
+why docker?
+- there is a company with next.js application
+  this company they have some constraints on next.js application like
+	Node - 18.xxx
+	postgres - xx
+	redis - xxxx
+        ...
+  let's say they have forgotten to tell you which version you should setup for running the application.
+  then you start installing node.js 20 version... 
+  the application is not working because the exact environment of the application is different and everyone is facing difficulty in setting up this exact environment on their local
+  because they have constraints on the version.
+  it is not easy to have exact developer environment across all local machines for all developers.
+  so instead of doing it locally why don't i put everything inside a box
+  so it is up to this box to manage all the configurations and it will have server running automatically.
+problem solved:-
+  i don't want to worry about setting up nodejs postgres and redis
+  - it is difficult to replicate the system configurations on windows, mac, ubuntu... and installation process is also different
+
+exact definition of docker?
+  with docker you get your own isolated environment that has packaged all the configurations
+
+this box is docker that has packaged all the configurations that is required to run this application
+
+Inside this docker - image and containers.
+
+Images:-
+   we have two types of repositories:- 
+	public repository - where any software which we can run on the dockerized system
+	private repository - amazon elastic container registry
+
+Image - what you download (docker pull node)
+Containers - when you run that image it becomes a container
+
+
+docker is a kind of operating system environment that helps you run applications.
+
+Docker          Normal Machine    virtual machine
+
+-Virtualized     Application    Virtualized
+-OS Kernel       OS Kernel      
+-Hardware        Hardware       Hardware
+
+docker is created from scratch and we keep layers on the top of each
+Node
+alphine
+scratch
+
+installing postgres?
+-docker pull postgres
+-docker pull postgres:16.4 - if we need to install 16.4 version
+
+docker images - to see what images are present
+docker run IMAGEID - to run an image 
+
+example- 
+if i have redis of xx and redis of x versions on my docker images
+when i run both 
+	docker run redis:x
+	docker run redix:xx
+then they both can run on same port because these are containers and containers are isolated one.
+redis:x is isolated from redis:xx
+
+docker ps - to display which containers are currently running
+
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS      NAMES
+d60099d3d534   ea96c435dc17   "docker-entrypoint.s…"   11 seconds ago   Up 10 seconds   6379/tcp   agitated_napier
+f9627711cf51   redis          "docker-entrypoint.s…"   5 minutes ago    Up 5 minutes    6379/tcp   hopeful_feistel
+
+example:-
+   i have two applications one use redis of one type and another with another type but i need to run both applications
+   when i see the above one they are running on the same port 6379/tcp. how my application get to know which version of redis should i use
+
+
+Port mapping:- 
+
+docker run -p 6000:6379 ea96c435dc17
+              port:container IMAGEID
+
+065cfa0fa789   ea96c435dc17   "docker-entrypoint.s…"   About a minute ago   Up About a minute   0.0.0.0:6000->6379/tcp   epic_moser
+
+i need to map port with each one
+nextjs1 - localhost:6000 - 6379/tcp - redis:x
+nextjs2 - localhost:6001 - 6379/tcp - redis:xx
+
+docker kill IMAGEID - to kill running container
+
+docker ps - to list running containers
+docker ps -a - to list all container (running,stopped,exited...)
+
+
+Yes, Docker containers have their own network stack, so the ports used inside a container are separate and independent from the ports on the host machine (localhost)
+
+
+Basic Commands:-
+docker pull node 
+docker run redis - if not downloading first it will download and run
+docker ps
+docker ps -a
+docker run redis -- it will stop at there we can't execute remaining commands and we need another cmd to do this
+docker run -d redis -- running the container in detached mode so that i can run the remaining docker commands within the cmd
+docker kill redis - for docker run redis
+docker stop IMAGEID -- for detached mode docker run -d redis
+detached mode - where you can free up your terminal and execute any more commands
+docker start CONTAINERPORT - to run the previous container id
+docker rmi IMAGEID - to delete an image
+if imageid is running somewhere then it will fail - make sure you stop the containers and docker rmi IMAGEID
+dockere run -p 6001:6379 -d IMAGEID
+
+docker logs CONTAINERID - to display the logs of the container
+docker run -dit --name nodejs-cont IMAGEID
+--- -dit -> detached mode with interactive
+--- --name -> to assign name for a container so that we don't need id every time with the name we can kill the container
+docker exec -it redis_container /bin/bash/
+- docker exec: Executes a command inside a running container.
+- -it: These flags enable interactive mode (-i) and allocate a pseudo-TTY (-t), allowing you to interact with the container in a terminal-like environment.
+- redis_container: This is the name or ID of your running Redis container. Replace redis_container with the actual name or container ID of your Redis container.
+- /bin/bash: This command runs a Bash shell inside the container, allowing you to interact with the container's file system.
+conclusion:- you are in the container inside the operating system environment
+
+Docker Network:- for communication between containers
+
+docker run -dit -p 5432:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_USER=user -e POSTGRES_DB=todo IMAGEID
+-p - port 
+-e - echo the commands that are send to the server
+i runned postgres
+5432 - port where postgres runs
+docker run -dit -p 5050:80 -e PGADMIN_DEFAULT_EMAIL=admin@admin.com -e PGADMIN_DEFAULT_PASSWORD=admin IMAGEID
+i runnded pgadmin
+
+
+docker network ls - to display all the networks
+docker network create db_network - to create a network
+docker run -dit -p 5432:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_USER=user -e POSTGRES_DB=todo --net db_network fe4efc6901dd
+here --net db_network is the network we are going to assign so that containers can communicate
+docker run -dit -p 5050:80 -e PGADMIN_DEFAULT_EMAIL=admin@admin.com -e PGADMIN_DEFAULT_PASSWORD=admin --net db_network 561c1f8f99f2
+
+Docker Volumes:-
